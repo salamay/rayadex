@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "923403538453",
+    "project_id": "rayadex-16bbb",
+    "storage_bucket": "rayadex-16bbb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:923403538453:android:f56438376b0cb46db3fe1c",
+        "android_client_info": {
+          "package_name": "com.rayadex.wallet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAsG5iQb4fQIZAu4LFPKOQSVP-3G-PbQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
