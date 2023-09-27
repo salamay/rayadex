@@ -6,11 +6,12 @@ class MyButton extends StatelessWidget {
   String text;
   Color bgColor;
   Color txtColor;
+  Color? borderSideColor;
   double bgRadius;
   double verticalPadding;
   double? width;
   Function onPressed;
-  MyButton({required this.text, required this. bgColor,required this.txtColor, required this.bgRadius,required this.verticalPadding, this.width,required this.onPressed});
+  MyButton({required this.text, required this. bgColor,required this.txtColor, required this.bgRadius,required this.verticalPadding, this.width,required this.onPressed,this.borderSideColor});
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -24,7 +25,7 @@ class MyButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(bgRadius)),
               side: BorderSide(
-                  color: button_color,
+                  color: borderSideColor==null?button_color:borderSideColor!,
                   width: 1
               )
           ),

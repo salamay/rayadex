@@ -6,7 +6,7 @@ import 'package:sqflite/sqflite.dart';
 
 class LocalDatabase {
   //118
-  final int dbVersion=214;
+  final int dbVersion=231;
   final String tableSupportedCoins="supportedcoins";
   final String wallet_id="wallet_id";
   final String wallet_name="wallet_name";

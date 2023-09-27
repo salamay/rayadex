@@ -53,7 +53,7 @@ class BackupPhrase extends StatelessWidget {
                         color: themeController.isDark?primary_color_light:Colors.grey[300],
                         borderRadius: BorderRadius.all(Radius.circular(10.sp))
                       ),
-                      child: MediumText(text: wallet!.walletType==WalletType.MULTI?wallet.mnemonic!:wallet.privateKey!, color: w60_text_color, weight: FontWeight.bold, align: TextAlign.center,maxLines: 10,),
+                      child: MediumText(text: wallet!.walletType==WalletType.MULTI.name?wallet.mnemonic!:wallet.privateKey!, color: w60_text_color, weight: FontWeight.bold, align: TextAlign.center,maxLines: 10,),
                     ),
                     SizedBox(height: 20.sp,),
                     SizedBox(

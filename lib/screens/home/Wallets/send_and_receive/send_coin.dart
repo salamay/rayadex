@@ -92,8 +92,8 @@ class _SendCoinState extends State<SendCoin> {
               padding: EdgeInsets.all(8.sp),
               child: Consumer<BalanceController>(
                   builder: (context,bc,child) {
-                    if(bc.balances[widget.coin.wallet_address]!=null){
-                      double balance=double.parse(bc.balances[widget.coin.wallet_address]!.balance)*bc.currentPrices[widget.coin.asset_name]!;
+                    if(bc.balances[widget.coin.asset_name]!=null){
+                      double balance=bc.balances[widget.coin.asset_name]!.totalBalance!*bc.currentPrices[widget.coin.asset_name]!;
                       return Form(
                         key: _key,
                         onChanged: (){

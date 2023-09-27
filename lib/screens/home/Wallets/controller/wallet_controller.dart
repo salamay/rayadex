@@ -18,22 +18,23 @@ class WalletController extends ChangeNotifier{
       wallets=await _localDatabase.getAllWallet();
       if(wallets!=null&&wallets!.isNotEmpty){
         currentWallet=wallets!.first;
-        supportedCoins=await _localDatabase.getSupportedCoin(currentWallet!.wallet_id);
+        await getSupportedCoin(context);
         Provider.of<TransactionController>(context,listen: false).populateAsset(supportedCoin: supportedCoins!);
-        print("Supported coin:${supportedCoins!.length.toString()}");
+        return wallets;
       }else{
-
+        return [];
       }
-      return wallets;
+
     }catch(e){
       log(e.toString());
       throw Exception();
     }
   }
-  Future<void> getSupportedCoin(context)async{
+  Future<List<SupportedCoin>?> getSupportedCoin(context)async{
     try{
       supportedCoins=await _localDatabase.getSupportedCoin(currentWallet!.wallet_id);
       notifyListeners();
+      return supportedCoins;
     }catch(e){
       log(e.toString());
       throw Exception();

@@ -137,28 +137,6 @@ class ManageWallet extends StatelessWidget {
                 size: getBigIconSize(),
               ),
             ),
-            SizedBox(height: 10.sp,),
-            ListTile(
-              onTap: (){
-                Navigator.pushNamed(context, AppRoute.importByPrivateKey);
-              },
-              leading: Icon(
-                Icons.import_export,
-                color: Colors.grey[300],
-                size: getBigIconSize(),
-              ),
-              title: SmallText(
-                  text: "By private key",
-                  color: w60_text_color,
-                  weight: FontWeight.bold,
-                  align: TextAlign.start
-              ),
-              trailing:  Icon(
-                Icons.arrow_forward_ios_rounded,
-                color: Colors.grey[300],
-                size: getBigIconSize(),
-              ),
-            ),
           ],
         ),
       ),

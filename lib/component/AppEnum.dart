@@ -2,7 +2,7 @@ enum CoinType{
   TOKEN,COIN
 }
 enum CoinName{
- XRP
+ XRP,Bitcoin,Ethereum,Doge
 }
 enum TokenBlockChain{
   Ethereum,MATIC,BSC,Bitgert,Fantom,Phoenix,Optimism,Base

@@ -14,14 +14,12 @@ import 'package:ryipay/screens/home/controller/home-controller.dart';
 import 'package:ryipay/screens/new_wallet/controller/import_wallet_controller.dart';
 import 'package:ryipay/screens/new_wallet/controller/new_wallet_controller.dart';
 import 'package:ryipay/screens/settings/security_center/controller/security_controller.dart';
-import 'package:tatum/tatum.dart';
 import 'package:trust_wallet_core_lib/trust_wallet_core_lib.dart';
 import 'screens/home/Market/coin_info/model/controller/coin_info_controller.dart';
 import 'screens/settings/theme/controller/theme_controller.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  Tatum.initArchitecture();
   await Firebase.initializeApp();
   await GetStorage.init();
   TrustWalletCoreLib.init();

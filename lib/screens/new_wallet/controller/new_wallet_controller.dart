@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:typed_data';
+import 'package:base_x/base_x.dart';
 import 'package:bip39_mnemonic/bip39_mnemonic.dart' as mn;
 import 'package:crypto/crypto.dart';
+import 'package:ed25519_hd_key/ed25519_hd_key.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
@@ -12,19 +15,16 @@ import 'package:ryipay/screens/home/Wallets/controller/wallet_controller.dart';
 import 'package:ryipay/screens/home/Wallets/model/supported_coin.dart';
 import 'package:ryipay/screens/home/Wallets/model/wallet_model.dart';
 import 'package:ryipay/screens/widget/show_snack_bar.dart';
-import 'package:tatum/tatum.dart';
 import 'package:trust_wallet_core_lib/trust_wallet_core_ffi.dart';
 import 'package:trust_wallet_core_lib/trust_wallet_core_lib.dart';
 import 'package:hex/hex.dart';
 import 'package:uuid/uuid.dart';
 import 'package:web3dart/credentials.dart';
 import 'package:convert/convert.dart';
+import 'package:xrp_dart/xrp_dart.dart' as xrpDart;
 import '../wif.dart';
-import 'package:dart_bs58check/dart_bs58check.dart' as bs58check;
-import 'package:pointycastle/api.dart' as pc_api;
-import 'package:pointycastle/digests/sha512.dart';
-import 'package:pointycastle/macs/hmac.dart';
-import 'package:pointycastle/src/utils.dart' as pc_utils;
+
+
 class NewWalletController extends ChangeNotifier{
   bool isPassPhrase=false;
   String? mnemonic;
@@ -32,7 +32,6 @@ class NewWalletController extends ChangeNotifier{
   final localDatabase=LocalDatabase();
   HDWallet? wallet;
   var uuid = Uuid();
-  final tatum = Tatum.v3;
 
 
   void changePassPhrase(bool val){
@@ -84,16 +83,28 @@ class NewWalletController extends ChangeNotifier{
 
 
   Future<void> generateCoin({required BuildContext context,required String mnemonics,required WalletModel walletModel})async{
-    tatum.setKey('a85f8f21-ad23-4c31-9730-c329253ff059_100');
     try{
       log(mnemonics);
       wallet = HDWallet.createWithMnemonic(mnemonics);
       await Future.wait(Global.coins.map((cm)async{
         String coinType=cm.wallet_BIP44path!.split("/")[2].replaceAll("'", "");
         log("CoinType $coinType");
-        final xrp = tatum.ripple;
-        final wallet = await xrp.generateAccount();
+        String? walletAddress;
+        PrivateKey? pky;
+        walletAddress=wallet!.getAddressForCoin(int.parse(coinType));
+        pky= wallet!.getKeyForCoin(int.parse(coinType));
+        String privateKey;
 
+        if(coinType=="0"||coinType=="3"){
+          final wif = WIF.encode(hex.encode(pky.data()),int.parse(coinType));
+          privateKey=wif;
+        }else if(coinType=="144"){
+          pky= wallet!.getKeyForCoin(TWCoinType.TWCoinTypeXRP);
+          walletAddress=wallet!.getAddressForCoin(TWCoinType.TWCoinTypeXRP);
+          privateKey=hex.encode(pky.data());
+        }else{
+          privateKey =hex.encode(pky.data());
+        }
         final supportedCoin=SupportedCoin(
           id: uuid.v1(),
           wallet_id: walletModel.wallet_id,
@@ -103,8 +114,8 @@ class NewWalletController extends ChangeNotifier{
           coinImage: cm.coinImage,
           coinGekoId: cm.coinGekoId,
           coinType: cm.coinType,
-          wallet_address:wallet.address!,
-          privateKey: wallet.secret!,
+          wallet_address:walletAddress,
+          privateKey: privateKey,
         );
         await localDatabase.saveCoin(supportedCoin);
       }).toList());
@@ -112,6 +123,35 @@ class NewWalletController extends ChangeNotifier{
       log(e.toString());
       ShowSnackBar.show(context, "oops, something went wrong, please check your mnemonic phrase", Colors.red);
       throw Exception("");
+    }
+  }
+
+  String convertToXRPPrivateKeyFormat(List<int> privateKeyBytes) {
+    // Perform SHA-256 hashing twice
+    List<int> hash = sha256.convert(privateKeyBytes).bytes;
+    hash = sha256.convert(hash).bytes;
+
+    // Take the first 4 bytes as the checksum
+    List<int> checksum = hash.sublist(0, 4);
+
+    // Append the checksum to the private key
+    List<int> privateKeyWithChecksum = [...privateKeyBytes, ...checksum];
+
+    // Encode in Base58Check
+    var base58 = BaseXCodec('123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz');
+
+    var value = privateKeyWithChecksum;
+    String base58PrivateKey = base58.encode(Uint8List.fromList(value));
+
+    // Trim to the first 31 characters (keeping space for 's')
+    String trimmedKey = base58PrivateKey.substring(0, 30);
+
+    // Ensure the private key starts with 's'
+    if (trimmedKey.startsWith('s')) {
+      return trimmedKey;
+    } else {
+      // If not, append 's' and return
+      return 's$trimmedKey'.substring(0, 31);
     }
   }
 
@@ -133,5 +173,4 @@ class NewWalletController extends ChangeNotifier{
       throw Exception("");
     }
   }
-
 }

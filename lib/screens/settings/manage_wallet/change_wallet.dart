@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:ryipay/component/app_component.dart';
 import 'package:ryipay/component/texts/SmallText.dart';
+import 'package:ryipay/route/AppRoute.dart';
 import 'package:ryipay/screens/home/Wallets/controller/wallet_controller.dart';
 import 'package:ryipay/screens/home/Wallets/model/wallet_model.dart';
 import 'package:ryipay/screens/settings/theme/controller/theme_controller.dart';
@@ -45,7 +46,7 @@ class ChangeWallet extends StatelessWidget {
                     return ListTile(
                       onTap: ()async{
                         await wc.changeWallet(item);
-                        Navigator.pop(context);
+                        Navigator.pushNamedAndRemoveUntil(context, AppRoute.homepage, (route) => false);
                       },
                       leading: Icon(
                         Icons.wallet_outlined,

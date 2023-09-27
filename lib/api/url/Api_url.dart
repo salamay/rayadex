@@ -2,6 +2,12 @@ class ApiUrls{
   static String xrpBalance="https://api.tatum.io/v3/xrp/account";
   static String xrpTx="https://api.tatum.io/v3/xrp/account/tx";
   static String sendXrp="https://api.tatum.io/v3/xrp/transaction";
+  static String bitcoinBalance="https://api.tatum.io/v3/bitcoin/address/balance";
+  static String ethBalance="https://api.tatum.io/v3/ethereum/account/balance";
+  static String dogeBalance="https://api.tatum.io/v3/dogecoin/address/balance";
+  static String sendBitcoin="https://api.tatum.io/v3/bitcoin/transaction";
+  static String sendDoge="https://api.tatum.io/v3/dogecoin/transaction";
+  static String sendEthereum="https://api.tatum.io/v3/ethereum/transaction";
   static String coinMarkerts="https://api.coingecko.com/api/v3/coins";
   static String tokenData="https://api.coingecko.com/api/v3/coins";
   static String curentPrice="https://api.coingecko.com/api/v3/simple/price";
